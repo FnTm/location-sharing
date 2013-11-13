@@ -11,3 +11,15 @@ two:
   email: MyString
   password_hash: MyString
   password_salt: MyString
+
+jason:
+  name: "Jason"
+  email: "Jason@treehouse.com"
+  password_hash: "123"
+  password_salt: "456"
+
+jim:
+  name: "Jim"
+  email: "Jim@treehouse.com"
+  password_hash: "123"
+  password_salt: "456"
