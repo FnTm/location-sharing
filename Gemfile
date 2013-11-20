@@ -41,7 +41,7 @@ gem 'bcrypt-ruby', :require => "bcrypt"
 # gem 'capistrano', group: :development
 
 # Use pry for debugging
-gem 'pry', :require => "pry"
+gem 'pry', :require => "pry", group: [:development]
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
