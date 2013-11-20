@@ -8,6 +8,7 @@ class UserFriendship < ActiveRecord::Base
   belongs_to :friend, class_name: "User", foreign_key: "friend_id"
 
   validates_presence_of :friend_id, :user_id
+
   validate :not_friendship_to_self
   validate :relationship_uniqueness
   def get_friend_id
@@ -27,5 +28,9 @@ class UserFriendship < ActiveRecord::Base
     unless user_id != friend_id
       errors.add(:user_id, "cannot add self to friends.")
     end
+  end
+
+  def accept_friendship
+    self.accepted = 1
   end
 end
