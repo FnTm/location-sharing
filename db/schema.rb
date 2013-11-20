@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 20131118203810) do
     t.string   "password_salt"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "latitude"
+    t.float    "longitude"
   end
 
 end
