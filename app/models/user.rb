@@ -1,13 +1,8 @@
 class User < ActiveRecord::Base
-
-  attr_accessor :password
-  before_save :encrypt_password
-
-  validates_confirmation_of :password
-  validates_presence_of :password, :on => :create
-  validates_presence_of :email
-  validates_presence_of :name
-  validates_uniqueness_of :email
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
 
   has_many :user_friendships
   has_many :friends, through: :user_friendships
