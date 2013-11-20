@@ -47,16 +47,6 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="#">FindMyFriends</a>
-          <div class="container nav-collapse">
-            <ul class="nav">
-              <% if current_user %>
-                <li><%= link_to "Log out", log_out_path%></li>
-              <% else %>
-                <li><%= link_to "Log in", log_in_path  %></li>
-                <li><%= link_to "Sign up", sign_up_path  %></li>
-              <% end %>
-            </ul>
-          </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
@@ -65,6 +55,12 @@
         <div class="row">
           <div class="span9">
             <%= bootstrap_flash %>
+            <% if notice %>
+              <p class="alert alert-notice"><%= notice %></p>
+            <% end %>
+            <% if alert %>
+              <p class="alert alert-error"><%= alert %></p>
+            <% end %>
             <%= yield %>
           </div>
           <!-- <div class="span3"> -->
@@ -81,9 +77,6 @@
         </div><!--/row-->
 
       <footer>
-        <% if current_user %>
-          <p>Logged in as <%= link_to current_user.name.capitalize, controller: "users", action: "show", id: current_user.id %>.</p>
-          <% end %>
         <p>&copy; Company 2013</p>
       </footer>
 
