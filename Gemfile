@@ -50,5 +50,10 @@ gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
 
-gem 'shoulda', group: :test
+group :test do
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'factory_girl_rails'
+end
+
 gem 'devise'
