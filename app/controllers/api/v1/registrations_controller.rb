@@ -38,6 +38,14 @@ class API::V1::RegistrationsController < Devise::RegistrationsController
     return render :json => {success: true}
   end
 
+  def update_location
+    if resource.update_without_password(location_update_params)
+      return render :json => {success: true}
+    else
+      return render :status => 401, :json => {errors: resource.errors}
+    end
+  end
+
   private
 
   def sign_up_params
@@ -46,5 +54,9 @@ class API::V1::RegistrationsController < Devise::RegistrationsController
 
   def account_update_params
     params.require(:user).permit( :email, :password, :password_confirmation, :current_password)
+  end
+
+  def location_update_params
+    params.require(:user).permit( :latitude, :longitude)
   end
 end

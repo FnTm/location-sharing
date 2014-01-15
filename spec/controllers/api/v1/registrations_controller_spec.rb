@@ -71,6 +71,30 @@ describe API::V1::RegistrationsController do
       response.body['errors'].should_not be_nil
     end
   end
+
+  describe "Update location" do
+    before :each do
+      request.env['devise.mapping'] = Devise.mappings[:user]
+      @credentials = {:email => 'asd@def.com', :password => 'password', :password_confirmation => 'password', :authentication_token => 'asd'}
+      @user = FactoryGirl.create(:user, @credentials)
+      @user.latitude = 0
+      @user.longitude = 0
+
+      @lat = 155
+      @long = 250
+    end
+
+    it "should update location" do
+      put :update_location, :id => @user.id, 'user' => {:latitude => @lat, :longitude => @long}, :authentication_token => @user.authentication_token, :format => :json
+      response.code.should eq("200")
+      @user = User.find_by_id(@user.id)
+      @user.latitude.should eq(@lat)
+      @user.longitude.should eq(@long)
+    end
+
+    it "should not update location if no token was passed" do
+      put :update_location, :id => @user.id, 'user' => {:latitude => @lat, :longitude => @long}, :format => :json
+      response.code.should eq("401")
     end
   end
 end
