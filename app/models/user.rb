@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   # You likely have this before callback set up for the token.
-  before_save :ensure_authentication_token
+  before_save :ensure_authentication_token!
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :user_friendships
   has_many :friends, through: :user_friendships
 
-  def ensure_authentication_token
+  def ensure_authentication_token!
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token
     end

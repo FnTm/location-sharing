@@ -4,7 +4,7 @@ class API::V1::RegistrationsController < Devise::RegistrationsController
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
   skip_before_filter :authenticate_scope!, :only => [:update, :destroy]
 
-  before_filter :authenticate_user_from_token!, :except => [:create]
+  before_filter :authenticate_user_from_token, :except => [:create]
 
   def create
     build_resource(sign_up_params)
