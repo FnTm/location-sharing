@@ -10,6 +10,10 @@ FindMyFriends::Application.routes.draw do
         get '/users/:id', to: 'registrations#show'
         put '/users/:id/location', to: 'registrations#update_location'
       end
+      as :session do
+        post '/sessions/', to: 'sessions#create'
+        delete '/sessions/', to: 'sessions#destroy'
+      end
     end
   end
 end
