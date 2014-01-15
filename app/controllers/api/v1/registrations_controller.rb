@@ -34,6 +34,7 @@ class API::V1::RegistrationsController < Devise::RegistrationsController
   end
 
   def destroy
+    Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
     resource.destroy
     return render :json => {success: true}
   end
