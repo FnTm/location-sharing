@@ -6,15 +6,15 @@ class API::V1::RegistrationsController < Devise::RegistrationsController
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
   skip_before_filter :authenticate_scope!, :only => [:update, :destroy]
 
-  before_filter :authenticate_user_from_token, :except => [:create]
+  before_filter :authenticate_user_from_token!, :except => [:create]
 
   def create
     build_resource(sign_up_params)
     if resource.save
-      return render :json => {:success => true}
+      render :json => {:success => true}
     else
       clean_up_passwords resource
-      return render :status => 401, :json => {:errors => resource.errors}
+      render :status => 401, :json => {:errors => resource.errors}
     end
   end
 
@@ -24,26 +24,28 @@ class API::V1::RegistrationsController < Devise::RegistrationsController
   end
 
   def update
+    resource = current_user
     if resource.update_with_password(account_update_params)
       sign_in resource_name, resource
-      return render :json => {success: true}
+      render :json => {success: true}
     else
       clean_up_passwords resource
-      return render :status => 401, :json => {errors: resource.errors}
+      render :status => 401, :json => {errors: current_user.errors}
     end
   end
 
   def destroy
-    Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
+    resource = current_user
+    Devise.sign_out_all_scopes ? sign_out : sign_out(resource)
     resource.destroy
-    return render :json => {success: true}
+    render :json => {success: true}
   end
 
   def update_location
-    if resource.update_without_password(location_update_params)
-      return render :json => {success: true}
+    if current_user.update_without_password(location_update_params)
+      render :json => {success: true}
     else
-      return render :status => 401, :json => {errors: resource.errors}
+      render :status => 401, :json => {errors: current_user.errors}
     end
   end
 

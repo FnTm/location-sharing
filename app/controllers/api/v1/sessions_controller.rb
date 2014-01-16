@@ -6,7 +6,7 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   prepend_before_filter :require_no_authentication, :only => [:create]
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
-  before_filter :authenticate_user_from_token, :except => :create
+  before_filter :authenticate_user_from_token!, :except => :create
 
 
   def create
@@ -23,6 +23,7 @@ class Api::V1::SessionsController < Devise::SessionsController
   end
 
   def destroy
+    resource = current_user
     resource.reset_authentication_token!
     Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
     render :status => 200, :json => {}
