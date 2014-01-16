@@ -123,5 +123,13 @@ describe API::V1::RegistrationsController do
       put :update_location, :id => @user.id, 'user' => {:latitude => @lat, :longitude => @long}, :format => :json
       response.code.should eq("401")
     end
+    it "should not update anything except location" do
+      put :update_location, :id => @user.id, 'user' => {:latitude => @lat, :longitude => @long, :password => "password2", :password_confirmation => "password2", :email => "def@asd.com"}, :authentication_token => @user.authentication_token, :format => :json
+      response.code.should eq("200")
+      @user = User.find_by_id(@user.id)
+      @user.latitude.should eq(@lat)
+      @user.longitude.should eq(@long)
+      @user.email.should eq(@credentials[:email])
+    end
   end
 end
