@@ -26,7 +26,7 @@ class API::V1::SessionsController < Devise::SessionsController
     resource = current_user
     resource.reset_authentication_token!
     Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
-    render :status => 200, :json => {}
+    render :status => 200, :json => {:success => true}
   end
 
   def failure
