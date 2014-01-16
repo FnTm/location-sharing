@@ -1,4 +1,4 @@
-class Api::V1::SessionsController < Devise::SessionsController
+class API::V1::SessionsController < Devise::SessionsController
   include ApplicationHelper
   include Devise::Controllers::Helpers
 
