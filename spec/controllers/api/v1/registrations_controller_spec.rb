@@ -53,6 +53,33 @@ describe API::V1::RegistrationsController do
     end
   end
 
+  describe "Show user data" do
+    before :each do
+      request.env['devise.mapping'] = Devise.mappings[:user]
+      @credentials = {:email => 'asd@def.com', :name => "Juris Jurjāns", :password => 'password', :password_confirmation => 'password', :authentication_token => 'asd', :latitude => "1337.0", :longitude => "555.0"}
+      @user = FactoryGirl.create(:user, @credentials)
+    end
+
+    it "should return user data" do
+      get :show, :id => @user.id, :authentication_token => @user.authentication_token, :format => :json
+      response.code.should eq("200")
+      body = JSON.parse(response.body)
+      body["id"].should eq(@user.id)
+      body["name"].should eq(@user.name)
+      body["email"].should eq(@user.email)
+      body["latitude"].should eq(@user.latitude)
+      body["longitude"].should eq(@user.longitude)
+    end
+
+    it "should not return password" do
+      get :show, :id => @user.id, :authentication_token => @user.authentication_token, :format => :json
+      response.code.should eq("200")
+      body = JSON.parse(response.body)
+      body["password"].should be_nil
+      body["encrypted_password"].should be_nil
+    end
+  end
+
   describe "Delete account" do
     before :each do
       request.env['devise.mapping'] = Devise.mappings[:user]

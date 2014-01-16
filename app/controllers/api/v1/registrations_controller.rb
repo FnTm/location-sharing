@@ -19,8 +19,7 @@ class API::V1::RegistrationsController < Devise::RegistrationsController
   end
 
   def show
-    @user = User.find_by_id params["id"]
-    respond_with @user
+    render :json => current_user.as_json(only: [:id, :name, :email, :latitude, :longitude])
   end
 
   def update
