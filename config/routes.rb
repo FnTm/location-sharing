@@ -12,6 +12,12 @@ FindMyFriends::Application.routes.draw do
 
         post '/sessions/', to: 'sessions#create'
         delete '/sessions/', to: 'sessions#destroy'
+
+        get '/friends/', to: 'friends#index'
+        get '/friends/:id', to: 'friends#show'
+        post '/friends/', to: 'friends#create'
+        delete '/friends/:id', to: 'friends#destroy'
+        put '/friends/:id', to: 'friends#update'
       end
     end
   end
