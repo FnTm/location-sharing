@@ -16,6 +16,9 @@ describe API::V1::FriendsController do
       @user2 = User.new @credentials
       @credentials[:email] = 'asddd@def.com'
       @user3 = User.new @credentials
+      @user1.confirm!
+      @user2.confirm!
+      @user3.confirm!
       @user1.save!
       @user2.save!
       @user3.save!
@@ -33,6 +36,8 @@ describe API::V1::FriendsController do
       @user1 = User.new @credentials
       @credentials[:email] = 'asdd@def.com'
       @user2 = User.new @credentials
+      @user1.confirm!
+      @user2.confirm!
       @user1.save!
       @user2.save!
       post :create, :email => @user2.email, :fromat => :json
@@ -44,6 +49,10 @@ describe API::V1::FriendsController do
       @user1 = User.new @credentials
       @credentials[:email] = "asdd@def.com"
       @user2 = User.new @credentials
+
+      @user1.confirm!
+      @user2.confirm!
+
       @user1.save!
       @user2.save!
       UserFriendship.request @user1, @user2
@@ -82,6 +91,8 @@ describe API::V1::FriendsController do
         @user3 = User.new @credentials
         @credentials[:email] = 'asdddd@def.com'
         @user4 = User.new @credentials
+        @user3.confirm!
+        @user4.confirm!
         @user3.save!
         @user4.save!
         UserFriendship.request @user3, @user1

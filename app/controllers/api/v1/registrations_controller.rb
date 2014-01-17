@@ -6,7 +6,7 @@ class API::V1::RegistrationsController < Devise::RegistrationsController
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
   skip_before_filter :authenticate_scope!, :only => [:update, :destroy]
 
-  before_filter :authenticate_user_from_token!, :except => [:create]
+  before_filter :authenticate_user_from_token!, :except => [:create, :confirm_user, :resend_confirmation_instructions]
 
   def create
     build_resource(sign_up_params)
@@ -45,6 +45,24 @@ class API::V1::RegistrationsController < Devise::RegistrationsController
       render :json => {success: true}
     else
       render :status => 401, :json => {errors: current_user.errors}
+    end
+  end
+
+  def confirm_user
+    user = User.find_by_id params[:id]
+    if user and !user.confirmed?  and Devise.secure_compare(user.confirmation_token, params[:confirmation_token]) and user.confirm!
+      render :status => 200, :json => {success: true}
+    else
+      render :status => 401, :json => {errors: user.errors}
+    end
+  end
+
+  def resend_confirmation_instructions
+    user = User.find_by_id params[:id]
+    if user and !user.confirmed? and user.resend_confirmation_instructions
+      render :status => 200, :json => {success: true}
+    else
+      render :status => 403, :json => {errors: 'api.v1.user.user_already_confirmed'}
     end
   end
 

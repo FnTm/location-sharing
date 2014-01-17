@@ -25,6 +25,7 @@ describe API::V1::RegistrationsController do
       request.env['devise.mapping'] = Devise.mappings[:user]
       @credentials = {:email => 'asd@def.com', :password => 'password', :password_confirmation => 'password', :authentication_token => 'asd'}
       @user = FactoryGirl.create(:user, @credentials)
+      @user.confirm!
     end
 
     it "should change the password" do
@@ -58,6 +59,7 @@ describe API::V1::RegistrationsController do
       request.env['devise.mapping'] = Devise.mappings[:user]
       @credentials = {:email => 'asd@def.com', :name => "Juris Jurjāns", :password => 'password', :password_confirmation => 'password', :authentication_token => 'asd', :latitude => "1337.0", :longitude => "555.0"}
       @user = FactoryGirl.create(:user, @credentials)
+      @user.confirm!
     end
 
     it "should return user data" do
@@ -85,6 +87,7 @@ describe API::V1::RegistrationsController do
       request.env['devise.mapping'] = Devise.mappings[:user]
       @credentials = {:email => 'asd@def.com', :password => 'password', :password_confirmation => 'password', :authentication_token => 'asd'}
       @user = FactoryGirl.create(:user, @credentials)
+      @user.confirm!
     end
 
     it "should delete user" do
@@ -104,6 +107,7 @@ describe API::V1::RegistrationsController do
       request.env['devise.mapping'] = Devise.mappings[:user]
       @credentials = {:email => 'asd@def.com', :password => 'password', :password_confirmation => 'password', :authentication_token => 'asd'}
       @user = FactoryGirl.create(:user, @credentials)
+      @user.confirm!
       @user.latitude = 0
       @user.longitude = 0
 
@@ -130,6 +134,34 @@ describe API::V1::RegistrationsController do
       @user.latitude.should eq(@lat)
       @user.longitude.should eq(@long)
       @user.email.should eq(@credentials[:email])
+    end
+  end
+
+  describe "Confirmation" do
+    before :each do
+      request.env['devise.mapping'] = Devise.mappings[:user]
+      @credentials = {:email => 'klavs.taube@gmail.com', :password => 'password', :password_confirmation => 'password', :authentication_token => 'asd'}
+      @user = FactoryGirl.create(:user, @credentials)
+    end
+
+    it "should confirm account" do
+      post :confirm_user, :id => @user.id, :confirmation_token => @user.confirmation_token
+      @user.reload
+      @user.confirmed?.should eq(true)
+      response.code.should eq("200")
+    end
+
+    it "should resend confirmation instructions" do
+      get :resend_confirmation_instructions, :id => @user.id
+      response.code.should eq("200")
+    end
+
+    it "should return error if user is confirmed already" do
+      @user.confirm!
+      post :confirm_user, :id => @user.id, :confirmation_token => @user.confirmation_token
+      @user.reload
+      @user.confirmed?.should eq(true)
+      response.code.should eq("401")
     end
   end
 end

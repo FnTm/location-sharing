@@ -12,6 +12,7 @@ class API::V1::SessionsController < Devise::SessionsController
   def create
     resource = User.find_for_database_authentication(:email => params[:user][:email])
     return failure unless resource
+    return render json: { :user => {:id => resource.id, :email => resource.unconfirmed_email}, errors: ["api.v1.user.unconfirmed_user"]}, :status => "403" unless resource.confirmed?
 
     if resource.valid_password?(params[:user][:password])
       sign_in(:user, resource)
