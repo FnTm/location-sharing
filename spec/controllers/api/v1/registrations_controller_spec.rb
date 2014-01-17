@@ -4,7 +4,7 @@ describe API::V1::RegistrationsController do
   describe "Sign up" do
     before :each do
       request.env['devise.mapping'] = Devise.mappings[:user]
-      @credentials = {:email => 'asd@def.com', :password => 'password', :password_confirmation => 'password'}
+      @credentials = {:email => 'asd@def.com', :password => 'password', :password_confirmation => 'password', :name => "Klāvs"}
     end
 
     it "should create the user" do
@@ -17,6 +17,12 @@ describe API::V1::RegistrationsController do
       post :create, :user => @credentials, :format => :json
       response.code.should eq("401")
       response.body['password_confirmation'].should_not be_nil
+    end
+
+    it "should return error message if there is no name specified" do
+      @credentials[:name] = nil
+      post :create, :user => @credentials, :format => :json
+      response.code.should eq("401")
     end
   end
 

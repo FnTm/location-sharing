@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe API::V1::FriendsController do
   before :each do
-    @credentials = {:email => 'asd@def.com', :password => 'password', :password_confirmation => 'password'}
+    @credentials = {:email => 'asd@def.com', :password => 'password', :password_confirmation => 'password', :name => 'Klāvs'}
   end
 
   describe "Show friends" do

@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
   through: :user_friendships,
   :conditions => "accepted = 1"
 
+  validates_presence_of :name
+
   def ensure_authentication_token!
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token

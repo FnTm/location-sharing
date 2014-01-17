@@ -7,6 +7,8 @@ describe User do
   it { should_not allow_value("").for(:email) }
   it { should_not allow_value(nil).for(:email) }
   it { should_not allow_value("1").for(:password) }
+  it { should_not allow_value("").for(:name) }
+  it { should_not allow_value(nil).for(:name) }
   it { should allow_value("1jhdsJaZJd5").for(:password) }
   it "should not allow to create 2 users with the same e-mail" do
     credentials = {:email => 'asd@def.com', :password => 'password', :password_confirmation => 'password', :name => 'My name'}
