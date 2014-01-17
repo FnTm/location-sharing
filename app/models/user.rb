@@ -8,12 +8,28 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :user_friendships
-  has_many :friends, through: :user_friendships
+
+  has_many :friends,
+  through: :user_friendships,
+  :conditions => "accepted = 2"
+
+  has_many :invited_friends,
+  through: :user_friendships,
+  :conditions => "accepted = 0"
+
+  has_many :inviting_friends,
+  through: :user_friendships,
+  :conditions => "accepted = 1"
 
   def ensure_authentication_token!
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token
     end
+  end
+
+  def reset_authentication_token!
+    self.authentication_token = generate_authentication_token
+    save
   end
 
   private
