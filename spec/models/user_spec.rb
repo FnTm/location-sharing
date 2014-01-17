@@ -6,4 +6,11 @@ describe User do
   it { should_not allow_value("blah").for(:email) }
   it { should_not allow_value("1").for(:password) }
   it { should allow_value("1jhdsJaZJd5").for(:password) }
+  it "should not allow to create 2 users with the same e-mail" do
+    credentials = {:email => 'asd@def.com', :password => 'password', :password_confirmation => 'password'}
+    user = User.new credentials
+    user.save.should eq(true)
+    user = User.new credentials
+    user.save.should eq(false)
+  end
 end
