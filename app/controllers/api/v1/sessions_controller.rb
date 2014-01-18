@@ -12,7 +12,7 @@ class API::V1::SessionsController < Devise::SessionsController
   def create
     resource = User.find_for_database_authentication(:email => params[:user][:email])
     return failure unless resource
-    return render json: { :user => {:id => resource.id, :email => resource.unconfirmed_email}, errors: ["api.v1.user.unconfirmed_user"]}, :status => "403" unless resource.confirmed?
+    return render json: { :user => {:id => resource.id, :email => resource.email}, errors: ["api.v1.user.unconfirmed_user"]}, :status => "403" unless resource.confirmed?
 
     if resource.valid_password?(params[:user][:password])
       sign_in(:user, resource)
@@ -31,7 +31,7 @@ class API::V1::SessionsController < Devise::SessionsController
   end
 
   def failure
-    return render json: { success: false, errors: [t('api.v1.sessions.invalid_login')] }, :status => :unauthorized
+    return render json: { success: false, errors: ['api.v1.sessions.invalid_login'] }, :status => :unauthorized
   end
 
 end
