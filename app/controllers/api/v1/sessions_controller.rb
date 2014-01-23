@@ -10,6 +10,7 @@ class API::V1::SessionsController < Devise::SessionsController
 
 
   def create
+    return failure unless params[:user]
     resource = User.find_for_database_authentication(:email => params[:user][:email])
     return failure unless resource
     return render json: { :user => {:id => resource.id, :email => resource.email}, errors: ["api.v1.user.unconfirmed_user"]}, :status => "403" unless resource.confirmed?
@@ -17,7 +18,7 @@ class API::V1::SessionsController < Devise::SessionsController
     if resource.valid_password?(params[:user][:password])
       sign_in(:user, resource)
       resource.ensure_authentication_token!
-      render :json=> {:success => true, :authentication_token => resource.authentication_token}
+      render :json=> {:success => true, :authentication_token => resource.authentication_token, :id => resource.id}
       return
     end
     failure

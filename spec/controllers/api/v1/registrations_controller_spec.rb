@@ -153,8 +153,8 @@ describe API::V1::RegistrationsController do
     it "should confirm account" do
       post :confirm_user, :id => @user.id, :confirmation_token => @user.confirmation_token
       @user.reload
-      @user.confirmed?.should eq(true)
       response.code.should eq("200")
+      @user.confirmed?.should eq(true)
     end
 
     it "should resend confirmation instructions" do

@@ -15,7 +15,7 @@ FindMyFriends::Application.configure do
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { :host => "localhost:3000" }
+  config.action_mailer.default_url_options = { :host => "54.194.30.63:3000" }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -27,4 +27,12 @@ FindMyFriends::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  silence_warnings do
+    begin
+      require 'pry'
+      IRB = Pry
+    rescue LoadError
+    end
+  end
 end

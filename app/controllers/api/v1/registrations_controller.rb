@@ -49,11 +49,10 @@ class API::V1::RegistrationsController < Devise::RegistrationsController
   end
 
   def confirm_user
-    user = User.find_by_id params[:id]
-    if user and !user.confirmed?  and Devise.secure_compare(user.confirmation_token, params[:confirmation_token]) and user.confirm!
+    if User.confirm_by_token(params[:confirmation_token]).confirmed?
       render :status => 200, :json => {success: true}
     else
-      render :status => 401, :json => {errors: user.errors}
+      render :status => 401, :json => {success: false}
     end
   end
 
